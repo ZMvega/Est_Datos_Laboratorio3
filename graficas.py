@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+
 import argparse
 import csv
 import json
@@ -30,7 +31,6 @@ plt.rcParams.update({"font.size": 10, "axes.titlesize": 12, "axes.labelsize": 10
                      "legend.fontsize": 9, "axes.grid": True, "grid.alpha": 0.3})
 
 
-#lectura de datos
 def cargar_resumen(ruta):
     filas = []
     with open(ruta, newline="", encoding="utf-8") as f:
@@ -77,8 +77,9 @@ def pie(info, extra=""):
     r = p.get("repeticiones", "R")
     m = p.get("busquedas")
     m_txt = f"{m:,}".replace(",", ".") if isinstance(m, int) else "M"
-    texto = (f"Cada punto: media de R = {r} repeticiones; barras de error = IC 95 % de la media (t de Student). "
-             f"Búsquedas por medición: M = {m_txt} (Lista y ABB con IDs ordenados usan menos; ver tam_operacion en resumen.csv).")
+    texto = (
+        f"Cada punto: media de R = {r} repeticiones; donde hay barras de error, son el IC 95 % de la media (t de Student). "
+        f"Búsquedas por medición: M = {m_txt} (Lista y ABB con IDs ordenados usan menos; ver tam_operacion en resumen.csv).")
     return texto + (" " + extra if extra else "")
 
 
@@ -105,7 +106,6 @@ def ejes_n(ax, ns):
 
 
 def leyenda(ax):
-    #curvas medidas
     handles, etiquetas = ax.get_legend_handles_labels()
     pares = sorted(zip(handles, etiquetas), key=lambda p: p[1].startswith(("Referencia", "Igual")))
     ax.legend([p[0] for p in pares], [p[1] for p in pares])
@@ -122,8 +122,6 @@ def referencia(ax, ns, n0, y0, tipo, texto):
     ax.plot(ns, y, color="#7f8c8d", linestyle=":", linewidth=1.4, label=texto)
 
 
-
-#graficas
 def grafica_busqueda(filas, escenario, info, carpeta):
     fig, ax = plt.subplots(figsize=(8.5, 6))
     ancla = {}
@@ -186,9 +184,10 @@ def grafica_altura_vs_tiempo(filas, info, carpeta):
             x, y = col(s, "altura_media"), col(s, "media_us_por_op")
             ax.scatter(x, y, color=COLORES[est], marker=MARCA_ESC[esc], s=55,
                        label=etiqueta(est, info, esc), zorder=3)
-            for r in s:
+            for r in (s[0], s[-1]):  # solo menor y mayor N: evita etiquetas encimadas
                 ax.annotate(f"N={r['N']:,}".replace(",", "."), (r["altura_media"], r["media_us_por_op"]),
-                            fontsize=6.5, xytext=(4, 3), textcoords="offset points", color="#555555")
+                            fontsize=6.5, xytext=(5, 3 if esc == "aleatorio" else -9), textcoords="offset points",
+                            color="#555555")
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_xlabel("Altura media del árbol (niveles)")
@@ -196,7 +195,7 @@ def grafica_altura_vs_tiempo(filas, info, carpeta):
     ax.set_title("Relación entre la altura del árbol y el tiempo de búsqueda")
     ax.legend()
     guardar(fig, carpeta, "altura_vs_tiempo.png", info,
-            "Cada punto es un tamaño N; las etiquetas indican N.")
+            "Cada punto es un tamaño N; se etiquetan el menor y el mayor N de cada serie.")
 
 
 def grafica_total(filas, operacion, titulo, ylabel, nombre, info, carpeta):
@@ -240,7 +239,6 @@ def grafica_aceleracion(filas, info, carpeta):
     guardar(fig, carpeta, "aceleracion_vs_lista.png", info)
 
 
-
 def referencia_teorica(operacion, estructura, escenario):
     t = {
         ("buscar", "Lista"): "1 (O(N))",
@@ -259,7 +257,7 @@ def referencia_teorica(operacion, estructura, escenario):
     return t.get((operacion, estructura, escenario)) or t.get((operacion, estructura), "")
 
 
-def tabla_comparativa(filas, carpeta):
+def tabla_pendientes(filas, carpeta):
     ruta = os.path.join(carpeta, "comparativa.csv")
     campos = ["escenario", "estructura", "operacion", "metrica", "n_puntos", "N_min", "N_max",
               "pendiente_empirica", "r2", "pendiente_teorica_aprox"]
@@ -314,7 +312,7 @@ def main():
     grafica_total(filas, "listar", "Tiempo de listar todos los estudiantes en orden ascendente de ID",
                   "Tiempo de listado completo (s)", "listado.png", info, args.salida)
     grafica_aceleracion(filas, info, args.salida)
-    tabla_comparativa(filas, args.salida)
+    tabla_pendientes(filas, args.salida)
 
 
 if __name__ == "__main__":
