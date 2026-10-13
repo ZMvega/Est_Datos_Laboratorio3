@@ -1,0 +1,61 @@
+{
+  "fecha_inicio": "2026-10-12T18:26:29",
+  "sistema_operativo": "Windows-11-10.0.26200-SP0",
+  "arquitectura": "AMD64",
+  "cpu": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+  "nucleos_logicos": 16,
+  "ram_total_gb": 15.25,
+  "python": "3.14.5 (main, May 12 2026, 01:59:30)  [MINGW GCC UCRT 16.1.0 64 bit (AMD64)]",
+  "implementacion_python": "CPython",
+  "reloj": "time.perf_counter (tiempo de pared, monotono)",
+  "recolector_basura_durante_medicion": "desactivado (gc.disable)",
+  "ejecutado_en_colab": false,
+  "carga_sistema_inicio": null,
+  "parametros": {
+    "tamanos": [
+      200,
+      1000,
+      5000
+    ],
+    "repeticiones": 3,
+    "busquedas": 1000,
+    "n_max_abb_ordenado": 5000,
+    "perfil": "rapido"
+  },
+  "argumentos_cli": {
+    "perfil": "rapido",
+    "tamanos": null,
+    "repeticiones": null,
+    "busquedas": null,
+    "n_max_abb_ordenado": null,
+    "orden": 64,
+    "frac_fallidas": 0.0,
+    "presupuesto_pasos": 50000000,
+    "semilla": "lab3",
+    "salida": "prueba",
+    "sin_verificar": false,
+    "solo_resumen": false
+  },
+  "duracion_total_s": 7.7,
+  "carga_sistema_fin": null,
+  "busquedas_por_medicion": {
+    "aleatorio/200/Lista": 1000,
+    "aleatorio/200/ABB": 1000,
+    "aleatorio/200/B+": 1000,
+    "aleatorio/1000/Lista": 1000,
+    "aleatorio/1000/ABB": 1000,
+    "aleatorio/1000/B+": 1000,
+    "aleatorio/5000/Lista": 1000,
+    "aleatorio/5000/ABB": 1000,
+    "aleatorio/5000/B+": 1000,
+    "ordenado/200/Lista": 1000,
+    "ordenado/200/ABB": 1000,
+    "ordenado/200/B+": 1000,
+    "ordenado/1000/Lista": 1000,
+    "ordenado/1000/ABB": 1000,
+    "ordenado/1000/B+": 1000,
+    "ordenado/5000/Lista": 1000,
+    "ordenado/5000/ABB": 1000,
+    "ordenado/5000/B+": 1000
+  }
+}
